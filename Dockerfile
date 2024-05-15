@@ -3,6 +3,7 @@ FROM python:3.9-slim
 
 # Install AWS CLI using pip
 RUN pip install awscli
+RUN aws --version
 
 # Install Terraform
 RUN apt update && apt install -y wget unzip \
