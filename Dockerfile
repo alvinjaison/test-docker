@@ -37,16 +37,16 @@ RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-aarch64.zip" -o "awscliv
 
 
 # Copy your Terraform files and scripts into the container
-COPY ./app-infra /app
+COPY . /app
 
 # Make the script executable
-RUN chmod +x /app/run_terraform.sh
+#RUN chmod +x /app/run_terraform.sh
 
 # # Create a non-root user and switch to it
 # RUN useradd -m myuser
 # USER myuser
 
 # Define entry point command
-CMD ["/app/run_terraform.sh"]
+CMD ["sleep 10"]
 
 # End of Dockerfile
