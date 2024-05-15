@@ -1,10 +1,3 @@
-
-Terraform is not available via pip because it's not a Python package; it's a standalone binary distributed by HashiCorp. Therefore, you can't install Terraform using pip. Instead, you need to download the Terraform binary and install it manually.
-
-Here's how you can do it in a Dockerfile:
-
-Dockerfile
-Copy code
 # Use a base image with necessary dependencies
 FROM python:3.9-slim
 
@@ -22,4 +15,4 @@ RUN apt update && apt install -y wget unzip \
 RUN terraform --version
 
 # Define entry point command
-CMD ["terraform init"]
+CMD ["terraform"]
