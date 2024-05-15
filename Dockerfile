@@ -10,9 +10,7 @@ RUN apt update -y --fix-missing && apt install -y \
         gnupg \
         software-properties-common \
         wget \
-        gpg \
-        curl \
-        unzip
+        gpg 
 
 
 
@@ -30,9 +28,11 @@ RUN echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] \
 
 RUN apt update && apt install terraform -y
 
-RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-aarch64.zip" -o "awscliv2.zip" \
-    &&    unzip awscliv2.zip \
-    &&    sudo ./aws/install
+RUN apt install -y curl unzip \
+    && curl "https://awscli.amazonaws.com/awscli-exe-linux-aarch64.zip" -o "awscliv2.zip" \
+    && unzip awscliv2.zip \
+    && sudo ./aws/install \
+    && rm awscliv2.zip
 
 
 
