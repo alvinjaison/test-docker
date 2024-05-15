@@ -1,52 +1,25 @@
+
+Terraform is not available via pip because it's not a Python package; it's a standalone binary distributed by HashiCorp. Therefore, you can't install Terraform using pip. Instead, you need to download the Terraform binary and install it manually.
+
+Here's how you can do it in a Dockerfile:
+
+Dockerfile
+Copy code
 # Use a base image with necessary dependencies
-FROM ubuntu:latest
+FROM python:3.9-slim
 
-# Set the working directory
-WORKDIR /app
+# Install AWS CLI using pip
+RUN pip install awscli
 
-RUN apt clean
+# Install Terraform
+RUN apt update && apt install -y wget unzip \
+    && wget https://releases.hashicorp.com/terraform/1.0.11/terraform_1.0.11_linux_amd64.zip \
+    && unzip terraform_1.0.11_linux_amd64.zip \
+    && mv terraform /usr/local/bin \
+    && rm terraform_1.0.11_linux_amd64.zip
 
-RUN apt update -y --fix-missing && apt install -y \
-        gnupg \
-        software-properties-common \
-        wget \
-        gpg 
-
-
-
-RUN wget -O- https://apt.releases.hashicorp.com/gpg | \
-        gpg --dearmor | \
-        tee /usr/share/keyrings/hashicorp-archive-keyring.gpg > /dev/null
-
-RUN gpg --no-default-keyring \
-    --keyring /usr/share/keyrings/hashicorp-archive-keyring.gpg \
-    --fingerprint
-
-RUN echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] \
-    https://apt.releases.hashicorp.com $(lsb_release -cs) main" | \
-    tee /etc/apt/sources.list.d/hashicorp.list
-
-RUN apt update && apt install terraform -y
-
-RUN apt install -y curl unzip \
-    && curl "https://awscli.amazonaws.com/awscli-exe-linux-aarch64.zip" -o "awscliv2.zip" \
-    && unzip awscliv2.zip \
-    && sudo ./aws/install \
-    && rm awscliv2.zip
-
-
-
-# Copy your Terraform files and scripts into the container
-COPY . /app
-
-# Make the script executable
-#RUN chmod +x /app/run_terraform.sh
-
-# # Create a non-root user and switch to it
-# RUN useradd -m myuser
-# USER myuser
+# Verify Terraform installation
+RUN terraform --version
 
 # Define entry point command
-CMD ["sleep 10"]
-
-# End of Dockerfile
+CMD ["terraform init"]
